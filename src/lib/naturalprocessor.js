@@ -1,67 +1,53 @@
 import natural from 'natural';
-//import SpellChecker from 'spellchecker';
-import SpellCorrector from 'spelling-corrector';
+
+//import SpellCorrector from 'spelling-corrector';
 export default function request(data) {
 	var naturalprocessing = natural;
-	var spellCorrector = new SpellCorrector();
-	spellCorrector.loadDictionary();
+	//var spellCorrector = new SpellCorrector();
+	//spellCorrector.loadDictionary();	
 	var tokenizer = new naturalprocessing.WordTokenizer();
 	var tot;
 	var result = {};
+        var finalResult={};
 	var z = [];
 	var y = [];
 
 	var i;
 	var x = tokenizer.tokenize(data.toString());
-	for(var m = 0;m<x.length;m++){
-		//x[m] = SpellChecker.getCorrectionsForMisspelling(x[m])[0]
+	/*for(var m = 0;m<x.length;m++){	
+		
 		x[m] = spellCorrector.correct(x[m])
-	}
+	}*/
 	var Analyzer = naturalprocessing.SentimentAnalyzer;
 	var stemmer = naturalprocessing.PorterStemmer;
 	var analyzer = new Analyzer("English", stemmer, "afinn");
-	var fear = /^.*\b(fear|afraid|terror|fright|fearfulness|horror|alarm|panic|agitation|trepidation|dread|consternation|dismay|distress|anxiety|worry|angst|unease|uneasiness|apprehension|apprehensiveness|nervousness|nerves|timidity|disquiet|disquietude|discomposure|unrest|perturbation|foreboding|misgiving|doubt|suspicion|jitteriness|twitchiness|funk|worriment|inquietude|phobia|aversion|antipathy|dread|bugbear|bogey|nightmare|horror|anxiety|neurosis|complex|mania)\b.*$/i;
+	var fear =/^.*\b(fear|afraid|terror|fright|fearfulness|horror|alarm|panic|agitation|trepidation|dread|consternation|dismay|distress|anxiety|worry|angst|unease|uneasiness|apprehension|apprehensiveness|nervousness|nerves|timidity|disquiet|disquietude|discomposure|unrest|perturbation|foreboding|misgiving|doubt|suspicion|jitteriness|twitchiness|funk|worriment|inquietude|phobia|aversion|antipathy|dread|bugbear|bogey|nightmare|horror|anxiety|neurosis|complex|mania)\b.*$/i;
 
-	var Anger = /^.*\b(anger|angry|annoyance|vexation|exasperation|crossness|irritation|irritability|indignation|pique|displeasure|resentment|rage|fury|wrath|outrage|temper|road rage|air rage|irascibility|ill temper|dyspepsia|spleen|ill humour|tetchiness|testiness|waspishness|aggravated|annoy|irritate|exasperate|irk|vex|put out|provoke|pique|gall|displease|enrage|incense|infuriate|madden|inflame|antagonize|ruffle|nark|gravel|empurple)\b.*$/i;
+	var Anger =/^.*\b(anger|angry|furious|fury|annoyance|vexation|exasperation|crossness|irritation|irritated|irritability|indignation|pique|displeasure|resentment|rage|fury|wrath|outrage|temper|road rage|air rage|irascibility|ill temper|dyspepsia|spleen|ill humour|tetchiness|testiness|waspishness|aggravated|annoy|irritate|exasperate|irk|vex|put out|provoke|pique|gall|displease|enrage|incense|infuriate|madden|inflame|antagonize|ruffle|nark|gravel|empurple|outburst)\b.*$/i;
 
-	var sad = /^.*\b(sad|pain|pained|vexed|vexation|unhappy|sorrowful|dejected|regretful|depressed|downcast|miserable|downhearted|down|despondent|despairing|disconsolate|out of sorts|desolate|wretched|glum|gloomy|doleful|dismal|blue|melancholy|melancholic|low-spirited|mournful|woeful|woebegone|forlorn|crestfallen|broken-hearted|heartbroken|inconsolable|grief-stricken|tragic|unhappy|unfortunate|awful|sorrowful|miserable|cheerless|wretched|sorry|pitiful|pitiable|grievous|traumatic|depressing|distressing|dispiriting|heartbreaking|heart-rending|agonizing|harrowing|unfortunate|regrettable|sorry|wretched|deplorable|lamentable|pitiful|pitiable|pathetic|shameful|disgraceful)\b.*$/i;
+	var sad =/^.*\b(sad|pain|pained|vexed|vexation|unhappy|sorrowful|dejected|regretful|depressed|downcast|miserable|downhearted|down|despondent|despairing|disconsolate|out of sorts|desolate|wretched|glum|gloomy|doleful|dismal|blue|melancholy|melancholic|low-spirited|mournful|woeful|woebegone|forlorn|crestfallen|broken-hearted|heartbroken|inconsolable|grief-stricken|tragic|unhappy|unfortunate|awful|sorrowful|miserable|cheerless|wretched|sorry|pitiful|pitiable|grievous|traumatic|depressing|distressing|dispiriting|heartbreaking|heart-rending|agonizing|harrowing|unfortunate|regrettable|sorry|wretched|deplorable|lamentable|pitiful|pitiable|pathetic|shameful|disgraceful)\b.*$/i;
 
-	var joy = /^.*\b(joy|happy|happiness|delight|great pleasure|joyfulness|jubilation|triumph|exultation|rejoicing|happiness|gladness|glee|exhilaration|ebullience|exuberance|elation|euphoria|bliss|ecstasy|transports of delight|rapture|radiance|enjoyment|gratification|felicity|cloud nine|seventh heaven|delectation|pleasure|source of pleasure|delight|treat|thrill|success|satisfaction|luck|successful result|positive result|accomplishment|achievement)\b.*$/i;
+	var joy =/^.*\b(joy|happy|happiness|delight|great pleasure|joyfulness|jubilation|triumph|exultation|rejoicing|happiness|gladness|glee|exhilaration|ebullience|exuberance|elation|euphoria|bliss|ecstasy|transports of delight|rapture|radiance|enjoyment|gratification|felicity|cloud nine|seventh heaven|delectation|pleasure|source of pleasure|delight|treat|thrill|success|satisfaction|luck|successful result|positive result|accomplishment|achievement)\b.*$/i;
 
-	var disgust = /^.*\b(disgust|revulsion|repugnance|aversion|distaste|abhorrence|loathing|detestation|odium|execration|horror|nausea|informalyuck factor|archaicdisrelish|rarerepellence|repellency|revolt|repel|repulse|sicken|nauseate|cause to feel nauseous|make shudder|turn someone's stomach|make someone's gorge rise|be repugnant to|be repulsive to|be distasteful to|informalturn off|make someone want to throw up|squick. outrage|shock|horrify|appal|scandalize|offend|affront|dismay|displease|dissatisfy)\b.*$/i;
+	var disgust =/^.*\b(disgust|disgusting|disgusted|revulsion|repugnance|aversion|distaste|abhorrence|loathing|detestation|odium|execration|horror|nausea|informalyuck factor|archaicdisrelish|rarerepellence|repellency|revolt|repel|repulse|sicken|nauseate|cause to feel nauseous|make shudder|turn someone's stomach|make someone's gorge rise|be repugnant to|be repulsive to|be distasteful to|informalturn off|make someone want to throw up|squick. outrage|shock|horrify|appal|scandalize|offend|affront|dismay|displease|dissatisfy)\b.*$/i;
 
-	var surprise = /^.*\b(surprise|surprised|astonished|amazed|in amazement|nonplussed|taken aback|startled|astounded|stunned|flabbergasted|staggered|shocked|shellshocked|stupefied|open-mouthed|dumbfounded|dumbstruck|speechless|thunderstruck|dazed|benumbed|confounded|agape|jolted|shaken up|unexpected|unanticipated|unforeseen|unpredictable|unpredicted|astonishing|amazing|startling|astounding|striking|staggering|incredible|extraordinary|dazzling|breathtaking|remarkable|wonderful|unusual|mind blowing|amazeballs)\b.*$/i;
+	var surprise =/^.*\b(surprise|surprised|shocked|shock|astonished|amazed|in amazement|nonplussed|taken aback|startled|astounded|stunned|flabbergasted|staggered|shocked|shell shocked|stupefied|open-mouthed|dumbfounded|dumbstruck|speechless|thunderstruck|dazed|benumbed|confounded|agape|jolted|shaken up|unexpected|unanticipated|unforeseen|unpredictable|unpredicted|astonishing|amazing|startling|astounding|striking|staggering|incredible|extraordinary|dazzling|breathtaking|remarkable|wonderful|unusual|mind blowing|amazeballs)\b.*$/i;
 
-	var trust = /^.*\b(trust|confidence|belief|faith|freedom from suspicion|freedom from doubt|sureness|certainty|certitude|assurance|conviction|credence|reliance)\b.*$/i;
+	var trust =/^.*\b(trust|confidence|belief|faith|freedom from suspicion|freedom from doubt|sureness|certainty|certitude|assurance|conviction|credence|reliance)\b.*$/i;
 
-	var anticipation = /^.*\b(anticipation|expectation|prediction|forecast|prolepsis|expectancy|expectation|hope|hopefulness|excitement|suspense)\b.*$/i;
+	var anticipation =/^.*\b(anticipation|expectation|prediction|forecast|prolepsis|expectancy|expectation|hope|hopefulness|excitement|suspense)\b.*$/i;
 
-	var shame = /^.*\b(shame|humiliation|mortification|chagrin|ignominy|loss of face|shamefacedness|embarrassment|indignity|abashment|discomfort|discomfiture|discomposure|guilt|remorse|contrition|compunction|humiliate|mortify|make someone feel ashamed|chagrin|embarrass|abash|chasten)\b.*$/i;
+	var shame =/^.*\b(shame|contempt|discredit|disesteem|humiliation|mortification|chagrin|ignominy|loss of face|shamefacedness|embarrassment|indignity|abashment|discomfort|discomfiture|discomposure|guilt|remorse|contrition|compunction|humiliate|mortify|make someone feel ashamed|chagrin|embarrass|abash|chasten)\b.*$/i;
 
-	var kindness = /^.*\b(kind|kindness|kindliness| kind-heartedness| warm-heartedness| tender-heartedness| goodwill| affectionateness| affection| warmth| gentleness| tenderness| concern| care|consideration| considerateness| helpfulness| thoughtfulness| unselfishness| selflessness| altruism| compassion| sympathy| understanding| big-heartedness| benevolence| benignity| friendliness| neighbourliness| hospitality| amiability| courteousness| public-spiritedness|generosity| magnanimity| indulgence| patience| tolerance| charitableness| graciousness| lenience| humaneness| mercifulness) \b.*$/i;
+	var kindness =/^.*\b(kind|kindness|kindliness|kind heartedness|warm heartedness|tender-heartedness|goodwill|affectionateness|affection|warmth|gentleness|tenderness|concern|care|consideration|considerateness|helpfulness|thoughtfulness|unselfishness|selflessness|altruism|compassion|sympathy|understanding|big-heartedness|benevolence|benignity|friendliness|neighbourliness|hospitality|amiability|courteousness|public-spiritedness|generosity|magnanimity|indulgence|patience|tolerance|charitableness|graciousness|lenience|humaneness|mercifulness)\b.*$/i;
 
-	var pity = /^.*\b(pity|compassion|commiseration|condolence|sorrow|regret|sadness|distress|sympathy|fellowfeeling)\b.*$/i;
+	var pity =/^.*\b(pity|compassion|commiseration|condolence|sorrow|regret|sadness|distress|disstressed|sympathy|fellowfeeling)\b.*$/i;
 
-	var envy = /^.*\b(envy|jealous|jealousy|enviousness|covetousness|desire|resentment|resentfulness|bitterness|discontent|spite)\b.*$/i;
+	var envy =/^.*\b(envy|jealous|jealousy|enviousness|covetousness|desire|resentment|resentfulness|bitterness|discontent|spite)\b.*$/i;
 
-	var love = /^.*\b(love|infatuation|deep affection|fondness|tenderness|warmth|intimacy|attachment|endearment|devotion|adoration|doting|idolization|worship|passion|ardour|desire|lust|yearning|infatuation|adulation|besottedness|compassion|care|caring|regard|solicitude|concern|warmth|friendliness|friendship|kindness|charity|goodwill|sympathy|kindliness|altruism|philanthropy|unselfishness|benevolence|brotherliness|sisterliness|fellow feeling|humanity|relationship|love affair|affair|romance|liaison|affair of the heart|intrigue|amour)\b.*$/i;
+	var love =/^.*\b(love|infatuation|deep affection|fondness|tenderness|warmth|intimacy|attachment|like|endearment|devotion|adoration|doting|idolization|worship|passion|ardour|desire|lust|yearning|infatuation|adulation|besottedness|compassion|care|caring|regard|solicitude|concern|warmth|friendliness|friendship|kindness|charity|goodwill|sympathy|kindliness|altruism|philanthropy|unselfishness|benevolence|brotherliness|sisterliness|fellow feeling|humanity|relationship|love affair|affair|romance|liaison|affair of the heart|intrigue|amour)\b.*$/i;
 
-	var pairing = {
-		"Fear": ["em em-fearful"],
-		"Anger": ["em em-rage"],
-		"Sad": [],
-		"Joy": ["em em-angel"],
-		"Disgust": [],
-		"Trust": [],
-		"Anticipation": [],
-		"Shame": [],
-		"Kindness": [],
-		"Pity": [],
-		"Envy": [],
-		"Love": ["em em-couple_with_heart"],
-		"Surprise": ["em em-face_with_raised_eyebrow"],
-		"Emotion": ["em em-expressionless"],
-	}
+
 	for (i = 0; i < x.length; i++) {
 
 		if (x[i].match(fear)) {
@@ -105,47 +91,70 @@ export default function request(data) {
 		} else if (x[i].match(surprise)) {
 			z[12] = "Surprise";
 			y[12] = analyzer.getSentiment(["Surprise"]);
-		} else {
-			z[13] = "Emotion";
-			y[13] = analyzer.getSentiment(x);
-			tot = Math.abs(Math.round(((y[13] / 5) * 100)))
-		}
+		}  
+			
 	}
-	z.forEach((z, j) => result[z] = y[j]);
 
+                        z[13] = "Emotion";
+			y[13] = analyzer.getSentiment(x);
+			tot = Math.abs(Math.round(((y[13] / 4) * 100)))
+
+		
+	z.forEach((z, j) => result[z] = y[j]);
+	
 	var min = Math.min.apply(null, Object.keys(result).map(function (x) {
+        console.log("min value"+result[x]);
+
 		return result[x]
 	}));
 	var max = Math.max.apply(null, Object.keys(result).map(function (x) {
+        console.log("max value"+result[x]);
 		return result[x]
     }));
-
+    
 	if (Math.abs(min) > Math.abs(max) || Math.abs(max) == Math.abs(min)) {
-		result["emotion"] = Object.keys(result).filter(function (x) {
+		finalResult["emotion"] = Object.keys(result).filter(function (x) {
 			return result[x] == min;
 		})[0];
 	} else {
         console.log("here "+max+" min"+min);
-		result["emotion"] = Object.keys(result).filter(function (x) {
+		finalResult["emotion"] = Object.keys(result).filter(function (x) {
             return result[x] == max;
         })[0];
 	}
-    for (const key of Object.keys(result)) {
-		const value = result[key]
-		if (`${key}` == "Emotion" && value < 0 && value > -2) {
-			result["emotionDes"] = "Negative Emotion" + " " + tot + "%";
-		} else if (`${key}` == "Emotion" && value == -2 && value > -3 && value != 0) {
-			result["emotionDes"] = "Negative Emotion that affects your thought process" + " " + tot + "%";
-		} else if (`${key}` == "Emotion" && value == -3 || value < -3 && value != 0) {
-			result["emotionDes"] = "Negative Emotion that affects you completely" + " " + tot + "%";
-		} else if (`${key}` == "Emotion" && value == 0) {
-			result["emotionDes"] = "Normal and Confused Emotions";
-		} else if (`${key}` == "Emotion" && value > 0) {
-			result["emotionDes"] = "Positive Emotion" + " " + tot + "%";
-		}
-	}
-	result["emotion"] = pairing[result["emotion"]];
-	console.log("resultant object " + JSON.stringify(result));
-	return result;
+                 for (const key of Object.keys(result)){
+                     const value = result[key]
+                     //   console.log(`${key} -> ${value}`)
+                         if(`${key}`=="Emotion"&& result[key]<0 && result [key]>-2)
+                            {
+                              finalResult["emotionDes"] ="Negative Emotion"+" "+tot+"%";
+                            }
+                            else if(`${key}`=="Emotion" && result[key]==-2 && result[key]>-3 && result[key]!=0)
+                            {
+                             finalResult["emotionDes"] ="Negative Emotion that affects your thought process"+" "+tot+"%";
+                            }
+                            else if(`${key}`=="Emotion" && result[key]==-3 || result[key]<-3 && result[key]!=0)
+                            {
+                             finalResult["emotionDes"] ="Negative Emotion that affects you completely"+" "+tot+"%";
+                            }
+                            else if(`${key}`=="Surprise" && result["Emotion"]==0 && result["Emotion"]>=0)
+                            {
+                            finalResult["emotionDes"] ="Positive emotion that surprised you";
+                            }
+                            else if(`${key}`=="Emotion" && result[key]>0)
+                            {
+                             finalResult["emotionDes"] ="Positive Emotion"+" "+tot+"%";
+                            }
+                            else if(Object.keys(result).length==1 && result["Emotion"]==0)
+                            {
+                             finalResult["emotionDes"]="Can't be Categorized";
+                            }
+                        }
+
+                           
+                           
+                         
+	console.log("resultant object " + JSON.stringify(finalResult));
+	return finalResult;
 
 }
